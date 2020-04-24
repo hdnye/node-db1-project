@@ -29,10 +29,29 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-
-
 //UPDATE account
+router.put('/:id', async (req, res, next) => {
+    try {
+        const payload = {
+            name: req.body.name,
+            budget: req.body.budget
+          }
+        await db('accounts').where('id', req.params.id).update(payload)
+        const updatedAct = await db('accounts').where('id', req.params.id).first()
+        res.json(updatedAct)
+        } catch(err) {
+            next(err)
+        }
+})
 
 //DELETE account
+router.delete('/:id', async (req, res, next) => {
+    try { 
+       await db('accounts').where('id', req.params.id).del()
+       res.status(202).end()
+    } catch(err) {
+        next(err)
+    }
+})
 
 module.exports = router;
